@@ -2,6 +2,7 @@ import React from 'react';
 import {ImageBackground, StyleSheet, Text, View} from 'react-native';
 import {ILLogo, ILGetStarted} from '../../assets';
 import {Button, Gap} from '../../components';
+import {colors} from '../../utils/colors';
 
 const GetStarted = ({navigation}) => {
   return (
@@ -21,7 +22,7 @@ const GetStarted = ({navigation}) => {
         <Button
           type="secondary"
           title="Sign In"
-          onPress={() => navigation.navigate('Login')}
+          onPress={() => navigation.replace('Login')}
         />
       </View>
     </ImageBackground>
@@ -34,12 +35,12 @@ const styles = StyleSheet.create({
   page: {
     padding: 40,
     justifyContent: 'space-between',
-    backgroundColor: 'white',
+    backgroundColor: colors.white,
     flex: 1,
   },
   title: {
     fontSize: 28,
-    color: 'white',
+    color: colors.white,
     marginTop: 91,
     fontFamily: 'Nunito-SemiBold',
   },
