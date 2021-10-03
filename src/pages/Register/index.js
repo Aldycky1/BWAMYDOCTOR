@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Button, Gap, Header, Input} from '../../components';
-import {colors} from '../../utils/colors';
+import {colors} from '../../utils';
 
 const Register = ({navigation}) => {
   return (
@@ -16,7 +16,10 @@ const Register = ({navigation}) => {
         <Gap height={24} />
         <Input label="Password" />
         <Gap height={24} />
-        <Button title="Continue" />
+        <Button
+          title="Continue"
+          onPress={() => navigation.navigate('UploadPhoto')}
+        />
       </View>
     </View>
   );
