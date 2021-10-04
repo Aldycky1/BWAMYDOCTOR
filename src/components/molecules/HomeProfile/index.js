@@ -7,7 +7,7 @@ const HomeProfile = () => {
   return (
     <View style={styles.container}>
       <Image source={DummyUser} style={styles.avatar} />
-      <View>
+      <View style={styles.userInfo}>
         <Text style={styles.name}>Shayna Melinda</Text>
         <Text style={styles.profession}>Product Designer</Text>
       </View>
@@ -20,6 +20,7 @@ export default HomeProfile;
 const styles = StyleSheet.create({
   container: {flexDirection: 'row'},
   avatar: {width: 46, height: 46, borderRadius: 46 / 2, marginRight: 12},
+  userInfo: {justifyContent: 'center'},
   name: {
     fontSize: 16,
     fontFamily: fonts.primary[600],
