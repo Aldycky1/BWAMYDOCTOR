@@ -14,7 +14,6 @@ const DoctorCategory = ({category, onPress}) => {
     if (category === 'dokter obat') {
       return <ILCatObat style={styles.illustration} />;
     }
-
     return <ILCatAnak style={styles.illustration} />;
   };
 
