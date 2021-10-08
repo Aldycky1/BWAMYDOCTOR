@@ -5,12 +5,14 @@ import {colors, fonts} from '../../utils';
 
 const Chatting = () => {
   return (
-    <View>
+    <View style={styles.page}>
       <Header type="dark-profile" title="Nairobi Putri Hayza" />
-      <Text style={styles.chatDate}>Senin, 21 Maret, 2021</Text>
-      <ChatItem />
-      <ChatItem />
-      <ChatItem />
+      <View style={styles.content}>
+        <Text style={styles.chatDate}>Senin, 21 Maret, 2021</Text>
+        <ChatItem />
+        <ChatItem />
+        <ChatItem />
+      </View>
       <InputChat />
     </View>
   );
@@ -19,6 +21,8 @@ const Chatting = () => {
 export default Chatting;
 
 const styles = StyleSheet.create({
+  page: {backgroundColor: colors.white, flex: 1},
+  content: {flex: 1},
   chatDate: {
     fontSize: 11,
     fontFamily: fonts.primary.normal,
