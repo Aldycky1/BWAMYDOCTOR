@@ -7,7 +7,7 @@ const InputChat = () => {
   return (
     <View style={styles.container}>
       <TextInput style={styles.input} placeholder="Tulis pesan untuk Nairobi" />
-      <Button type="btn-icon-send" disable />
+      <Button type="btn-icon-send" />
     </View>
   );
 };
