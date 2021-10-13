@@ -21,16 +21,12 @@ const Register = ({navigation}) => {
     const auth = getAuth(Fire);
     createUserWithEmailAndPassword(auth, form.email, form.password)
       .then(userCredential => {
-        // Signed in
         setLoading(false);
+        setForm('reset');
         const user = userCredential.user;
         console.log('user credential: ', user);
       })
-      // .then(success => {
-      //   console.log('register success: ', success);
-      // })
       .catch(error => {
-        // const errorCode = error.code;
         const errorMessage = error.message;
         setLoading(false);
         console.log('error register: ', errorMessage);
