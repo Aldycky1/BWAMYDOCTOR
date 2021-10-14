@@ -1,11 +1,11 @@
+import {createUserWithEmailAndPassword, getAuth} from 'firebase/auth';
+import {getDatabase, ref, set} from 'firebase/database';
 import React, {useState} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
+import {showMessage} from 'react-native-flash-message';
 import {Button, Gap, Header, Input, Loading} from '../../components';
-import {colors, useForm} from '../../utils';
 import {Fire} from '../../config';
-import {getAuth, createUserWithEmailAndPassword} from 'firebase/auth';
-import {showMessage, hideMessage} from 'react-native-flash-message';
-import {getDatabase, ref, set} from 'firebase/database';
+import {colors, useForm} from '../../utils';
 
 const Register = ({navigation}) => {
   const [form, setForm] = useForm({
