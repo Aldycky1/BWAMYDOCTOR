@@ -5,10 +5,13 @@ import {Button, Gap, Header, Link} from '../../components';
 import {colors, fonts} from '../../utils';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {showMessage} from 'react-native-flash-message';
+import {Fire} from '../../config';
+import {getDatabase, ref, update, push, child} from 'firebase/database';
+import {getAuth, updateProfile} from 'firebase/auth';
 
 const UploadPhoto = ({navigation, route}) => {
-  const {fullName, profession} = route.params;
-
+  const {fullName, profession, uid, email} = route.params;
+  const [photoForDB, setPhotoForDB] = useState('');
   const [hasPhoto, setHasPhoto] = useState(false);
   const [photo, setPhoto] = useState(ILNullPhoto);
   const getImage = () => {
@@ -22,11 +25,32 @@ const UploadPhoto = ({navigation, route}) => {
           color: colors.white,
         });
       } else {
+        console.log('response getImage: ', response);
         const source = {uri: response.uri};
+
+        setPhotoForDB(`data:${response.type};base64, ${response.base64}`);
         setPhoto(source);
         setHasPhoto(true);
       }
     });
+  };
+
+  const uploadAndContinue = () => {
+    const db = getDatabase(Fire);
+
+    const data = {
+      fullName: fullName,
+      profession: profession,
+      email: email,
+      uid: uid,
+      photoURL: photoForDB,
+    };
+
+    const updates = {};
+    updates['/users/' + uid + '/'] = data;
+
+    update(ref(db), updates);
+    navigation.replace('MainApp');
   };
   return (
     <View style={styles.page}>
@@ -45,7 +69,7 @@ const UploadPhoto = ({navigation, route}) => {
           <Button
             disable={!hasPhoto}
             title="Upload and Continue"
-            onPress={() => navigation.replace('MainApp')}
+            onPress={uploadAndContinue}
           />
           <Gap height={30} />
           <Link
