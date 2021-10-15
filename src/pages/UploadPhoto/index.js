@@ -6,10 +6,10 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import {IconAddPhoto, IconRemovePhoto, ILNullPhoto} from '../../assets';
 import {Button, Gap, Header, Link} from '../../components';
 import {Fire} from '../../config';
-import {colors, fonts} from '../../utils';
+import {colors, fonts, storeData} from '../../utils';
 
 const UploadPhoto = ({navigation, route}) => {
-  // const {fullName, profession, uid, email} = route.params;
+  const {fullName, profession, uid} = route.params;
   const [photoForDB, setPhotoForDB] = useState('');
   const [hasPhoto, setHasPhoto] = useState(false);
   const [photo, setPhoto] = useState(ILNullPhoto);
@@ -38,20 +38,17 @@ const UploadPhoto = ({navigation, route}) => {
   };
 
   const uploadAndContinue = () => {
-    // const db = getDatabase(Fire);
+    const db = getDatabase(Fire);
 
-    // const data = {
-    //   fullName: fullName,
-    //   profession: profession,
-    //   email: email,
-    //   uid: uid,
-    //   photoURL: photoForDB,
-    // };
+    const data = route.params;
+    data.photoURL = photoForDB;
 
-    // const updates = {};
-    // updates['/users/' + uid + '/'] = data;
+    const updates = {};
+    updates['/users/' + uid + '/'] = data;
+    update(ref(db), updates);
 
-    // update(ref(db), updates);
+    storeData('user', data);
+
     navigation.replace('MainApp');
   };
   return (
@@ -64,8 +61,8 @@ const UploadPhoto = ({navigation, route}) => {
             {hasPhoto && <IconRemovePhoto style={styles.addPhoto} />}
             {!hasPhoto && <IconAddPhoto style={styles.addPhoto} />}
           </TouchableOpacity>
-          <Text style={styles.name}>Name</Text>
-          <Text style={styles.profession}>profession</Text>
+          <Text style={styles.name}>{fullName}</Text>
+          <Text style={styles.profession}>{profession}</Text>
         </View>
         <View>
           <Button
