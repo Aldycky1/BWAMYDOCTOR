@@ -2,11 +2,22 @@ import React, {useEffect} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {ILLogo} from '../../assets';
 import {colors, fonts} from '../../utils';
+import {getAuth, onAuthStateChanged} from 'firebase/auth';
 
 const Splash = ({navigation}) => {
   useEffect(() => {
     setTimeout(() => {
-      navigation.replace('GetStarted');
+      const auth = getAuth();
+      onAuthStateChanged(auth, user => {
+        if (user) {
+          // User is signed in, see docs for a list of available properties
+          console.log('user: ', user);
+          navigation.replace('MainApp');
+        } else {
+          // User is signed out
+          navigation.replace('GetStarted');
+        }
+      });
     }, 3000);
   }, []);
 
