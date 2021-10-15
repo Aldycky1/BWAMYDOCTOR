@@ -13,6 +13,7 @@ const UploadPhoto = ({navigation, route}) => {
   const [photoForDB, setPhotoForDB] = useState('');
   const [hasPhoto, setHasPhoto] = useState(false);
   const [photo, setPhoto] = useState(ILNullPhoto);
+
   const getImage = () => {
     launchImageLibrary(
       {quality: 0.5, maxWidth: 200, maxHeight: 200, includeBase64: true},
@@ -44,11 +45,10 @@ const UploadPhoto = ({navigation, route}) => {
     data.photoURL = photoForDB;
 
     const updates = {};
-    updates['/users/' + uid + '/'] = data;
+    updates[`/users/${uid}/`] = data;
     update(ref(db), updates);
 
     storeData('user', data);
-
     navigation.replace('MainApp');
   };
   return (

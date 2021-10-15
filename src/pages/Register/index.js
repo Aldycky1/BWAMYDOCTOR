@@ -30,15 +30,15 @@ const Register = ({navigation}) => {
           fullName: form.fullName,
           profession: form.profession,
           email: form.email,
-          uid: userCredential.user.uid,
+          uid: user.uid,
         };
 
         const db = getDatabase(Fire);
-        set(ref(db, 'users/' + userCredential.user.uid + '/'), data);
+        set(ref(db, `users/${user.uid}/`), data);
 
         storeData('user', data);
         navigation.navigate('UploadPhoto', data);
-        console.log('user credential: ', user);
+        console.log('user: ', user);
       })
       .catch(error => {
         const errorMessage = error.message;
