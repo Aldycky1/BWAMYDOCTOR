@@ -9,46 +9,49 @@ import {Fire} from '../../config';
 import {colors, fonts} from '../../utils';
 
 const UploadPhoto = ({navigation, route}) => {
-  const {fullName, profession, uid, email} = route.params;
+  // const {fullName, profession, uid, email} = route.params;
   const [photoForDB, setPhotoForDB] = useState('');
   const [hasPhoto, setHasPhoto] = useState(false);
   const [photo, setPhoto] = useState(ILNullPhoto);
   const getImage = () => {
-    launchImageLibrary({includeBase64: true}, response => {
-      console.log('response: ', response);
-      if (response.didCancel || response.error) {
-        showMessage({
-          message: 'oops, sepertinya anda belum memilih foto',
-          type: 'default',
-          backgroundColor: colors.error,
-          color: colors.white,
-        });
-      } else {
-        console.log('response getImage: ', response);
-        const source = {uri: response.uri};
+    launchImageLibrary(
+      {quality: 0.5, maxWidth: 200, maxHeight: 200, includeBase64: true},
+      response => {
+        console.log('response: ', response);
+        if (response.didCancel || response.errorMessage) {
+          showMessage({
+            message: 'oops, sepertinya anda belum memilih foto',
+            type: 'default',
+            backgroundColor: colors.error,
+            color: colors.white,
+          });
+        } else {
+          console.log('response getImage: ', response);
+          const source = {uri: response.uri};
 
-        setPhotoForDB(`data:${response.type};base64, ${response.base64}`);
-        setPhoto(source);
-        setHasPhoto(true);
-      }
-    });
+          setPhotoForDB(`data:${response.type};base64, ${response.base64}`);
+          setPhoto(source);
+          setHasPhoto(true);
+        }
+      },
+    );
   };
 
   const uploadAndContinue = () => {
-    const db = getDatabase(Fire);
+    // const db = getDatabase(Fire);
 
-    const data = {
-      fullName: fullName,
-      profession: profession,
-      email: email,
-      uid: uid,
-      photoURL: photoForDB,
-    };
+    // const data = {
+    //   fullName: fullName,
+    //   profession: profession,
+    //   email: email,
+    //   uid: uid,
+    //   photoURL: photoForDB,
+    // };
 
-    const updates = {};
-    updates['/users/' + uid + '/'] = data;
+    // const updates = {};
+    // updates['/users/' + uid + '/'] = data;
 
-    update(ref(db), updates);
+    // update(ref(db), updates);
     navigation.replace('MainApp');
   };
   return (
@@ -61,8 +64,8 @@ const UploadPhoto = ({navigation, route}) => {
             {hasPhoto && <IconRemovePhoto style={styles.addPhoto} />}
             {!hasPhoto && <IconAddPhoto style={styles.addPhoto} />}
           </TouchableOpacity>
-          <Text style={styles.name}>{fullName}</Text>
-          <Text style={styles.profession}>{profession}</Text>
+          <Text style={styles.name}>Name</Text>
+          <Text style={styles.profession}>profession</Text>
         </View>
         <View>
           <Button
