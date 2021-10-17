@@ -1,18 +1,18 @@
 import {getDatabase, ref, update} from '@firebase/database';
-import React, {useEffect, useState} from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import {Button, Header, Input, Profile, Gap} from '../../components';
-import {Fire} from '../../config';
-import {colors, getData, storeData} from '../../utils';
-import {launchImageLibrary} from 'react-native-image-picker';
-import {ILNullPhoto} from '../../assets';
-import {showMessage} from 'react-native-flash-message';
 import {
   EmailAuthProvider,
   getAuth,
-  updatePassword,
   reauthenticateWithCredential,
+  updatePassword,
 } from 'firebase/auth';
+import React, {useEffect, useState} from 'react';
+import {ScrollView, StyleSheet, View} from 'react-native';
+import {showMessage} from 'react-native-flash-message';
+import {launchImageLibrary} from 'react-native-image-picker';
+import {ILNullPhoto} from '../../assets';
+import {Button, Gap, Header, Input, Profile} from '../../components';
+import {Fire} from '../../config';
+import {colors, getData, storeData} from '../../utils';
 
 const UpdateProfile = ({navigation}) => {
   const [profile, setProfile] = useState({
@@ -42,7 +42,7 @@ const UpdateProfile = ({navigation}) => {
           message: 'Oops, password kurang dari 6 karakter',
           type: 'default',
           backgroundColor: colors.error,
-          color: 'white',
+          color: colors.white,
         });
       } else {
         updatePasswordOnly();
