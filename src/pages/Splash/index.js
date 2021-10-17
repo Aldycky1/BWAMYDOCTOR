@@ -3,11 +3,12 @@ import {StyleSheet, Text, View} from 'react-native';
 import {ILLogo} from '../../assets';
 import {colors, fonts} from '../../utils';
 import {getAuth, onAuthStateChanged} from 'firebase/auth';
+import {Fire} from '../../config';
 
 const Splash = ({navigation}) => {
   useEffect(() => {
     setTimeout(() => {
-      const auth = getAuth();
+      const auth = getAuth(Fire);
       onAuthStateChanged(auth, user => {
         if (user) {
           // User is signed in, see docs for a list of available properties

@@ -14,7 +14,7 @@ const HomeProfile = ({onPress}) => {
       // console.log('data user: ', res);
       const data = res;
       data.photoURL = {uri: res.photoURL};
-      console.log('new profile', data);
+      // console.log('new profile', data);
       setProfile(data);
     });
   }, []);

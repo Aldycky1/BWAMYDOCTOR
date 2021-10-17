@@ -6,6 +6,13 @@ import {Fire} from '../../config';
 import {colors, getData, storeData} from '../../utils';
 import {launchImageLibrary} from 'react-native-image-picker';
 import {ILNullPhoto} from '../../assets';
+import {showMessage} from 'react-native-flash-message';
+import {
+  EmailAuthProvider,
+  getAuth,
+  updatePassword,
+  reauthenticateWithCredential,
+} from 'firebase/auth';
 
 const UpdateProfile = ({navigation}) => {
   const [profile, setProfile] = useState({
@@ -27,12 +34,60 @@ const UpdateProfile = ({navigation}) => {
 
   const updateProfile = () => {
     console.log('profile: ', profile);
+    console.log('new Password: ', password);
+
+    if (password.length > 0) {
+      if (password.length < 6) {
+        showMessage({
+          message: 'Oops, password kurang dari 6 karakter',
+          type: 'default',
+          backgroundColor: colors.error,
+          color: 'white',
+        });
+      } else {
+        updatePasswordOnly();
+        updateProfileData();
+        navigation.replace('MainApp');
+      }
+    } else {
+      updateProfileData();
+      navigation.replace('MainApp');
+    }
+  };
+
+  const updatePasswordOnly = () => {
+    const auth = getAuth(Fire);
+    const {currentUser} = auth;
+    const {email} = currentUser;
+    const credential = EmailAuthProvider.credential(email, password);
+
+    reauthenticateWithCredential(currentUser, credential)
+      .then(() => {
+        onAuthStateChanged(auth, user => {
+          if (user) {
+            updatePassword(user, password).catch(error => {
+              showMessage({
+                message: error,
+                type: 'default',
+                backgroundColor: colors.error,
+                color: 'white',
+              });
+            });
+          }
+        });
+      })
+      .catch(error => {
+        console.log('error reauthenticated: ', error);
+      });
+  };
+
+  const updateProfileData = () => {
     const db = getDatabase(Fire);
 
     const data = profile;
     data.photoURL = photoForDB;
     const updates = {};
-    updates[`/users/${profile.uid}/`] = data;
+    updates[`/users/${data.uid}/`] = data;
     update(ref(db), updates);
 
     console.log('success: ', data);
@@ -89,7 +144,12 @@ const UpdateProfile = ({navigation}) => {
           <Gap height={24} />
           <Input label="Email" value={profile.email} disable />
           <Gap height={24} />
-          <Input label="Password" value={password} />
+          <Input
+            label="Password"
+            value={password}
+            onChangeText={value => setPassword(value)}
+            secureTextEntry
+          />
           <Gap height={24} />
           <Button title="Save Profile" onPress={updateProfile} />
         </View>
