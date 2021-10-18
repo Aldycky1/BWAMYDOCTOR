@@ -70,7 +70,7 @@ const UpdateProfile = ({navigation}) => {
                 message: error,
                 type: 'default',
                 backgroundColor: colors.error,
-                color: 'white',
+                color: colors.white,
               });
             });
           }
