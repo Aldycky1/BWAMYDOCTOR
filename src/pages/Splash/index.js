@@ -7,17 +7,19 @@ import {Fire} from '../../config';
 
 const Splash = ({navigation}) => {
   useEffect(() => {
-    setTimeout(() => {
-      const auth = getAuth(Fire);
-      onAuthStateChanged(auth, user => {
+    const auth = getAuth(Fire);
+    const unsubscribe = onAuthStateChanged(auth, user => {
+      setTimeout(() => {
         if (user) {
           navigation.replace('MainApp');
         } else {
           navigation.replace('GetStarted');
         }
-      });
-    }, 3000);
-  }, []);
+      }, 3000);
+    });
+
+    return () => unsubscribe();
+  }, [navigation]);
 
   return (
     <View style={styles.page}>
