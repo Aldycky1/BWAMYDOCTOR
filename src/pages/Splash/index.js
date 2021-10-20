@@ -11,11 +11,8 @@ const Splash = ({navigation}) => {
       const auth = getAuth(Fire);
       onAuthStateChanged(auth, user => {
         if (user) {
-          // User is signed in, see docs for a list of available properties
-          console.log('user: ', user);
           navigation.replace('MainApp');
         } else {
-          // User is signed out
           navigation.replace('GetStarted');
         }
       });

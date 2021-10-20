@@ -17,9 +17,7 @@ import {colors, fonts, getData} from '../../utils';
 
 const Doctor = ({navigation}) => {
   useEffect(() => {
-    getData('user').then(res => {
-      console.log('data user: ', res);
-    });
+    getData('user').then(res => {});
   }, []);
   return (
     <View style={styles.page}>

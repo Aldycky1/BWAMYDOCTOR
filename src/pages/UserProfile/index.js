@@ -25,7 +25,6 @@ const UserProfile = ({navigation}) => {
     const auth = getAuth(Fire);
     signOut(auth)
       .then(() => {
-        console.log('success sign out');
         navigation.replace('GetStarted');
       })
       .catch(error => {
