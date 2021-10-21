@@ -23,9 +23,9 @@ const Login = ({navigation}) => {
         const user = userCredential.user;
         dispatch({type: 'SET_LOADING', value: false});
         const dbRef = ref(getDatabase(Fire));
-        get(child(dbRef, `users/${user.uid}/`)).then(snapshot => {
-          if (snapshot.exists()) {
-            storeData('user', snapshot.val());
+        get(child(dbRef, `users/${user.uid}/`)).then(value => {
+          if (value.exists()) {
+            storeData('user', value.val());
             navigation.replace('MainApp');
           }
         });
