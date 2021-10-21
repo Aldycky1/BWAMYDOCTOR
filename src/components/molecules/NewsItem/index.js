@@ -1,7 +1,6 @@
 import React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
-import {DummyNews1} from '../../../assets';
-import {fonts, colors} from '../../../utils';
+import {colors, fonts} from '../../../utils';
 
 const NewsItem = ({title, date, image}) => {
   return (
