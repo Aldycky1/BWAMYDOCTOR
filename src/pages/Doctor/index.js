@@ -19,12 +19,23 @@ import {colors, fonts, showError} from '../../utils';
 
 const Doctor = ({navigation}) => {
   const [news, setNews] = useState([]);
+  const [categoryDoctor, setCategoryDoctor] = useState([]);
   useEffect(() => {
     const dbRef = ref(getDatabase(Fire));
     get(child(dbRef, `news/`))
       .then(value => {
         if (value.exists()) {
           setNews(value.val());
+        }
+      })
+      .catch(error => {
+        showError(error);
+      });
+
+    get(child(dbRef, `category_doctor/`))
+      .then(value => {
+        if (value.exists()) {
+          setCategoryDoctor(value.val());
         }
       })
       .catch(error => {
@@ -47,7 +58,7 @@ const Doctor = ({navigation}) => {
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
               <View style={styles.category}>
                 <Gap width={32} />
-                {JSONCategoryDoctor.data.map(item => {
+                {categoryDoctor.map(item => {
                   return (
                     <DoctorCategory
                       key={item.id}
