@@ -5,7 +5,7 @@ import {
   DummyDoctor1,
   DummyDoctor2,
   DummyDoctor3,
-  JSONCategoryDoctor,
+  ILNullPhoto,
 } from '../../assets';
 import {
   DoctorCategory,
@@ -15,11 +15,16 @@ import {
   RatedDoctor,
 } from '../../components';
 import {Fire} from '../../config';
-import {colors, fonts, showError} from '../../utils';
+import {colors, fonts, getData, showError} from '../../utils';
 
 const Doctor = ({navigation}) => {
   const [news, setNews] = useState([]);
   const [categoryDoctor, setCategoryDoctor] = useState([]);
+  const [profile, setProfile] = useState({
+    photoURL: ILNullPhoto,
+    fullName: '',
+    profession: '',
+  });
   useEffect(() => {
     const dbRef = ref(getDatabase(Fire));
     get(child(dbRef, `news/`))
@@ -41,6 +46,12 @@ const Doctor = ({navigation}) => {
       .catch(error => {
         showError(error);
       });
+
+    getData('user').then(res => {
+      const data = res;
+      data.photoURL = {uri: res.photoURL};
+      setProfile(data);
+    });
   }, []);
 
   return (
@@ -49,7 +60,10 @@ const Doctor = ({navigation}) => {
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.wrapperSection}>
             <Gap height={30} />
-            <HomeProfile onPress={() => navigation.navigate('UserProfile')} />
+            <HomeProfile
+              profile={profile}
+              onPress={() => navigation.navigate('UserProfile')}
+            />
             <Text style={styles.welcome}>
               Mau konsultasi dengan siapa hari ini?
             </Text>

@@ -26,7 +26,10 @@ const UpdateProfile = ({navigation}) => {
   useEffect(() => {
     getData('user').then(res => {
       const data = res;
-      setPhotoURL({uri: res.photoURL});
+      data.photoForDB = res?.photoURL?.length > 1 ? res.photoURL : ILNullPhoto;
+      const tempPhoto =
+        res?.photoURL?.length > 1 ? {uri: res.photoURL} : ILNullPhoto;
+      setPhotoURL(tempPhoto);
       setProfile(data);
     });
   }, []);
@@ -38,11 +41,9 @@ const UpdateProfile = ({navigation}) => {
       } else {
         updatePasswordOnly();
         updateProfileData();
-        navigation.replace('MainApp');
       }
     } else {
       updateProfileData();
-      navigation.replace('MainApp');
     }
   };
 
@@ -73,6 +74,7 @@ const UpdateProfile = ({navigation}) => {
     update(ref(db), updates);
 
     storeData('user', data);
+    navigation.replace('MainApp');
   };
 
   const changeText = (key, value) => {
