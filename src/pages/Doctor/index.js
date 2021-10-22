@@ -49,7 +49,8 @@ const Doctor = ({navigation}) => {
 
     getData('user').then(res => {
       const data = res;
-      data.photoURL = {uri: res.photoURL};
+      data.photoURL =
+        res?.photoURL?.length > 1 ? {uri: res.photoURL} : ILNullPhoto;
       setProfile(data);
     });
   }, []);
