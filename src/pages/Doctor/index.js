@@ -1,4 +1,12 @@
-import {child, get, getDatabase, ref} from '@firebase/database';
+import {
+  child,
+  get,
+  getDatabase,
+  ref,
+  query,
+  orderByChild,
+  limitToLast,
+} from '@firebase/database';
 import React, {useEffect, useState} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {
@@ -20,12 +28,63 @@ import {colors, fonts, getData, showError} from '../../utils';
 const Doctor = ({navigation}) => {
   const [news, setNews] = useState([]);
   const [categoryDoctor, setCategoryDoctor] = useState([]);
+  const [doctors, setDoctors] = useState([]);
   const [profile, setProfile] = useState({
     photoURL: ILNullPhoto,
     fullName: '',
     profession: '',
   });
   useEffect(() => {
+    getNews();
+    getCategoryDoctor();
+    getTopRatedDoctor();
+    getUser();
+  }, []);
+
+  const getTopRatedDoctor = () => {
+    const db = getDatabase(Fire);
+
+    const topRatedDoctor = query(
+      ref(db, 'doctors/'),
+      orderByChild('rate'),
+      limitToLast(3),
+    );
+
+    get(topRatedDoctor)
+      .then(value => {
+        console.log('top rated doctor: ', value.val());
+        if (value.exists()) {
+          const oldData = value.val();
+          const data = [];
+          Object.keys(oldData).map(key => {
+            data.push({
+              id: key,
+              data: oldData[key],
+            });
+          });
+          console.log('data hasil array: ', data);
+          setDoctors(data);
+        }
+      })
+      .catch(error => {
+        showError(error);
+      });
+  };
+
+  const getCategoryDoctor = () => {
+    const dbRef = ref(getDatabase(Fire));
+    get(child(dbRef, `category_doctor/`))
+      .then(value => {
+        if (value.exists()) {
+          setCategoryDoctor(value.val());
+        }
+      })
+      .catch(error => {
+        showError(error);
+      });
+  };
+
+  const getNews = () => {
     const dbRef = ref(getDatabase(Fire));
     get(child(dbRef, `news/`))
       .then(value => {
@@ -36,24 +95,16 @@ const Doctor = ({navigation}) => {
       .catch(error => {
         showError(error);
       });
+  };
 
-    get(child(dbRef, `category_doctor/`))
-      .then(value => {
-        if (value.exists()) {
-          setCategoryDoctor(value.val());
-        }
-      })
-      .catch(error => {
-        showError(error);
-      });
-
+  const getUser = () => {
     getData('user').then(res => {
       const data = res;
       data.photoURL =
         res?.photoURL?.length > 1 ? {uri: res.photoURL} : ILNullPhoto;
       setProfile(data);
     });
-  }, []);
+  };
 
   return (
     <View style={styles.page}>
@@ -88,24 +139,17 @@ const Doctor = ({navigation}) => {
           </View>
           <View style={styles.wrapperSection}>
             <Text style={styles.sectionLabel}>Top Rated Doctors</Text>
-            <RatedDoctor
-              name="Alexa Rachel"
-              desc="Pediatrician"
-              avatar={DummyDoctor1}
-              onPress={() => navigation.navigate('DoctorProfile')}
-            />
-            <RatedDoctor
-              name="Sunny Frank"
-              desc="Dentist"
-              avatar={DummyDoctor2}
-              onPress={() => navigation.navigate('DoctorProfile')}
-            />
-            <RatedDoctor
-              name="Poe Minn"
-              desc="Podiatrist"
-              avatar={DummyDoctor3}
-              onPress={() => navigation.navigate('DoctorProfile')}
-            />
+            {doctors.map(doctor => {
+              return (
+                <RatedDoctor
+                  key={doctor.id}
+                  name={doctor.data.fullName}
+                  desc={doctor.data.profession}
+                  avatar={{uri: doctor.data.photo}}
+                  onPress={() => navigation.navigate('DoctorProfile')}
+                />
+              );
+            })}
             <Text style={styles.sectionLabel}>Good News</Text>
           </View>
           {news.map(item => {
