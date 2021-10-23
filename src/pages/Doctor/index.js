@@ -66,7 +66,7 @@ const Doctor = ({navigation}) => {
 
   const getCategoryDoctor = () => {
     const dbRef = ref(getDatabase(Fire));
-    get(child(dbRef, `category_doctor/`))
+    get(child(dbRef, 'category_doctor/'))
       .then(value => {
         if (value.exists()) {
           setCategoryDoctor(value.val());
@@ -79,7 +79,7 @@ const Doctor = ({navigation}) => {
 
   const getNews = () => {
     const dbRef = ref(getDatabase(Fire));
-    get(child(dbRef, `news/`))
+    get(child(dbRef, 'news/'))
       .then(value => {
         if (value.exists()) {
           setNews(value.val());
@@ -122,7 +122,7 @@ const Doctor = ({navigation}) => {
                     <DoctorCategory
                       key={item.id}
                       category={item.category}
-                      onPress={() => navigation.navigate('ChooseDoctor')}
+                      onPress={() => navigation.navigate('ChooseDoctor', item)}
                     />
                   );
                 })}

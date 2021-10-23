@@ -24,14 +24,7 @@ const UpdateProfile = ({navigation}) => {
   const [photoForDB, setPhotoForDB] = useState('');
 
   useEffect(() => {
-    getData('user').then(res => {
-      const data = res;
-      data.photoForDB = res?.photoURL?.length > 1 ? res.photoURL : ILNullPhoto;
-      const tempPhoto =
-        res?.photoURL?.length > 1 ? {uri: res.photoURL} : ILNullPhoto;
-      setPhotoURL(tempPhoto);
-      setProfile(data);
-    });
+    getUser();
   }, []);
 
   const updateProfile = () => {
@@ -98,6 +91,17 @@ const UpdateProfile = ({navigation}) => {
         }
       },
     );
+  };
+
+  const getUser = () => {
+    getData('user').then(res => {
+      const data = res;
+      data.photoForDB = res?.photoURL?.length > 1 ? res.photoURL : ILNullPhoto;
+      const tempPhoto =
+        res?.photoURL?.length > 1 ? {uri: res.photoURL} : ILNullPhoto;
+      setPhotoURL(tempPhoto);
+      setProfile(data);
+    });
   };
   return (
     <View style={styles.page}>

@@ -13,12 +13,7 @@ const UserProfile = ({navigation}) => {
     photoURL: ILNullPhoto,
   });
   useEffect(() => {
-    getData('user').then(res => {
-      const data = res;
-      data.photoURL =
-        res?.photoURL?.length > 1 ? {uri: res.photoURL} : ILNullPhoto;
-      setProfile(data);
-    });
+    getUser();
   }, []);
 
   const signOutApp = () => {
@@ -30,6 +25,15 @@ const UserProfile = ({navigation}) => {
       .catch(error => {
         showError(error);
       });
+  };
+
+  const getUser = () => {
+    getData('user').then(res => {
+      const data = res;
+      data.photoURL =
+        res?.photoURL?.length > 1 ? {uri: res.photoURL} : ILNullPhoto;
+      setProfile(data);
+    });
   };
   return (
     <View style={styles.page}>

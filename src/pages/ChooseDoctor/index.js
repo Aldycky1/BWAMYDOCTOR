@@ -1,48 +1,70 @@
-import React from 'react';
+import {
+  equalTo,
+  get,
+  getDatabase,
+  orderByChild,
+  query,
+  ref,
+} from '@firebase/database';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {DummyDoctor4} from '../../assets';
 import {Header, List} from '../../components';
+import {Fire} from '../../config';
 import {colors} from '../../utils';
 
-const ChooseDoctor = ({navigation}) => {
+const ChooseDoctor = ({navigation, route}) => {
+  const itemCategory = route.params;
+  const [listDoctor, setListDoctor] = useState([]);
+  useEffect(() => {
+    callDoctorByCategory(itemCategory.category);
+  }, []);
+
+  const callDoctorByCategory = category => {
+    const db = getDatabase(Fire);
+
+    const listDoctor = query(
+      ref(db, 'doctors/'),
+      orderByChild('category'),
+      equalTo(category),
+    );
+
+    get(listDoctor)
+      .then(value => {
+        if (value.exists()) {
+          const oldData = value.val();
+          const data = [];
+          Object.keys(oldData).map(item => {
+            data.push({
+              id: item,
+              data: oldData[item],
+            });
+          });
+          setListDoctor(data);
+        }
+      })
+      .catch(error => {
+        showError(error);
+      });
+  };
   return (
     <View style={styles.page}>
       <Header
         type="dark"
-        title="Pilih Dokter Anak"
+        title={`Pilih ${itemCategory.category}`}
         onPress={() => navigation.goBack()}
       />
-      <List
-        type="next"
-        profile={DummyDoctor4}
-        name="Alexander Jennie"
-        desc="Wanita"
-        onPress={() => navigation.navigate('Chatting')}
-      />
-      <List
-        type="next"
-        profile={DummyDoctor4}
-        name="Alexander Jennie"
-        desc="Wanita"
-      />
-      <List
-        type="next"
-        profile={DummyDoctor4}
-        name="Alexander Jennie"
-        desc="Wanita"
-      />
-      <List
-        type="next"
-        profile={DummyDoctor4}
-        name="Alexander Jennie"
-        desc="Wanita"
-      />
-      <List
-        type="next"
-        profile={DummyDoctor4}
-        name="Alexander Jennie"
-        desc="Wanita"
-      />
+      {listDoctor.map(doctor => {
+        return (
+          <List
+            type="next"
+            key={doctor.id}
+            profile={{uri: doctor.data.photo}}
+            name={doctor.data.fullName}
+            desc={doctor.data.gender}
+            onPress={() => navigation.navigate('Chatting')}
+          />
+        );
+      })}
     </View>
   );
 };

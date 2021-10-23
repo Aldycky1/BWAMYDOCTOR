@@ -10,7 +10,7 @@ const Hospitals = () => {
   const [hospitals, setHospitals] = useState([]);
   useEffect(() => {
     const dbRef = ref(getDatabase(Fire));
-    get(child(dbRef, `hospitals/`))
+    get(child(dbRef, 'hospitals/'))
       .then(value => {
         if (value.exists()) {
           setHospitals(value.val());
