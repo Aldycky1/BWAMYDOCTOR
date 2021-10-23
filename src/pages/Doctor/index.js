@@ -47,7 +47,6 @@ const Doctor = ({navigation}) => {
 
     get(topRatedDoctor)
       .then(value => {
-        console.log('top rated doctor: ', value.val());
         if (value.exists()) {
           const oldData = value.val();
           const data = [];
@@ -57,7 +56,6 @@ const Doctor = ({navigation}) => {
               data: oldData[key],
             });
           });
-          console.log('data hasil array: ', data);
           setDoctors(data);
         }
       })
