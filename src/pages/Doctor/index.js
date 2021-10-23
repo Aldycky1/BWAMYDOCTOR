@@ -69,7 +69,10 @@ const Doctor = ({navigation}) => {
     get(child(dbRef, 'category_doctor/'))
       .then(value => {
         if (value.exists()) {
-          setCategoryDoctor(value.val());
+          const data = value.val();
+          const filterData = data.filter(el => el !== null);
+
+          setCategoryDoctor(filterData);
         }
       })
       .catch(error => {
@@ -82,7 +85,10 @@ const Doctor = ({navigation}) => {
     get(child(dbRef, 'news/'))
       .then(value => {
         if (value.exists()) {
-          setNews(value.val());
+          const data = value.val();
+          const filterData = data.filter(el => el !== null);
+
+          setNews(filterData);
         }
       })
       .catch(error => {
