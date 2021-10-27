@@ -1,18 +1,17 @@
 import React from 'react';
-import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
+import {Image, StyleSheet, Text, View} from 'react-native';
 import {colors, fonts} from '../../../utils';
 import {Button} from '../../atoms';
-import {DummyDoctor8} from '../../../assets';
 
-const DarkProfile = ({onPress}) => {
+const DarkProfile = ({onPress, title, desc, photo}) => {
   return (
     <View style={styles.container}>
       <Button type="icon-only" icon="back-light" onPress={onPress} />
       <View style={styles.content}>
-        <Text style={styles.name}>Nairobi Putri Hayza</Text>
-        <Text style={styles.desc}>Dokter Anak</Text>
+        <Text style={styles.name}>{title}</Text>
+        <Text style={styles.desc}>{desc}</Text>
       </View>
-      <Image source={DummyDoctor8} style={styles.avatar} />
+      <Image source={photo} style={styles.avatar} />
     </View>
   );
 };
@@ -36,11 +35,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: fonts.primary[600],
     color: colors.white,
+    textTransform: 'capitalize',
   },
   desc: {
     fontSize: 14,
     fontFamily: fonts.primary.normal,
     marginTop: 6,
     color: colors.text.subTitle,
+    textTransform: 'capitalize',
   },
 });
