@@ -26,26 +26,28 @@ const Chatting = ({navigation, route}) => {
     const db = getDatabase(Fire);
     const getChat = ref(db, urlFirebase);
     onValue(getChat, snapshot => {
-      const dataSnapshot = snapshot.val();
-      const allDataChat = [];
-      Object.keys(dataSnapshot).map(key => {
-        const dataChat = dataSnapshot[key];
-        const newDataChat = [];
+      if (snapshot.exists()) {
+        const dataSnapshot = snapshot.val();
+        const allDataChat = [];
+        Object.keys(dataSnapshot).map(key => {
+          const dataChat = dataSnapshot[key];
+          const newDataChat = [];
 
-        Object.keys(dataChat).map(itemChat => {
-          newDataChat.push({
-            id: itemChat,
-            data: dataChat[itemChat],
+          Object.keys(dataChat).map(itemChat => {
+            newDataChat.push({
+              id: itemChat,
+              data: dataChat[itemChat],
+            });
+          });
+
+          allDataChat.push({
+            id: key,
+            data: newDataChat,
           });
         });
-
-        allDataChat.push({
-          id: key,
-          data: newDataChat,
-        });
-      });
-      console.log('all data chat: ', allDataChat);
-      setChatData(allDataChat);
+        console.log('all data chat: ', allDataChat);
+        setChatData(allDataChat);
+      }
     });
   }, [dataDoctor.data.uid, user.uid]);
 
