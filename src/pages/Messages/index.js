@@ -1,10 +1,9 @@
-import {getDatabase, onValue, ref, get, child} from '@firebase/database';
-import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {DummyDoctor4, DummyDoctor5, DummyDoctor6} from '../../assets';
-import {List} from '../../components';
-import {Fire} from '../../config';
-import {colors, fonts, getData, showError} from '../../utils';
+import { child, get, getDatabase, onValue, ref } from '@firebase/database';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { List } from '../../components';
+import { Fire } from '../../config';
+import { colors, fonts, getData } from '../../utils';
 
 const Messages = ({navigation}) => {
   const [user, setUser] = useState({});
@@ -49,13 +48,17 @@ const Messages = ({navigation}) => {
       <View style={styles.content}>
         <Text style={styles.title}>Messages</Text>
         {historyChat.map(chat => {
+          const dataDoctor = {
+            id: chat.detailDoctor.uid,
+            data: chat.detailDoctor,
+          };
           return (
             <List
               key={chat.id}
               profile={{uri: chat.detailDoctor.photo}}
               name={chat.detailDoctor.fullName}
               desc={chat.lastContentChat}
-              onPress={() => navigation.navigate('Chatting')}
+              onPress={() => navigation.navigate('Chatting', dataDoctor)}
             />
           );
         })}
