@@ -17,7 +17,7 @@ const ChooseDoctor = ({navigation, route}) => {
   const [listDoctor, setListDoctor] = useState([]);
   useEffect(() => {
     callDoctorByCategory(itemCategory.category);
-  }, []);
+  }, [itemCategory.category]);
 
   const callDoctorByCategory = category => {
     const db = getDatabase(Fire);

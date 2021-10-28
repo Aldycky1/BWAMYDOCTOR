@@ -33,8 +33,10 @@ const Doctor = ({navigation}) => {
     getNews();
     getCategoryDoctor();
     getTopRatedDoctor();
-    getUser();
-  }, []);
+    navigation.addListener('focus', () => {
+      getUserData();
+    });
+  }, [navigation]);
 
   const getTopRatedDoctor = () => {
     const db = getDatabase(Fire);
@@ -100,7 +102,7 @@ const Doctor = ({navigation}) => {
     );
   };
 
-  const getUser = () => {
+  const getUserData = () => {
     getData('user').then(res => {
       const data = res;
       data.photoURL =
