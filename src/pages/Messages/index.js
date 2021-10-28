@@ -1,10 +1,10 @@
-import {getDatabase, push, ref, set, onValue} from '@firebase/database';
-import React, {useState, useEffect} from 'react';
+import {getDatabase, onValue, ref} from '@firebase/database';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {DummyDoctor4, DummyDoctor5, DummyDoctor6} from '../../assets';
 import {List} from '../../components';
-import {colors, fonts, getData} from '../../utils';
 import {Fire} from '../../config';
+import {colors, fonts, getData} from '../../utils';
 
 const Messages = ({navigation}) => {
   const [doctors] = useState([
