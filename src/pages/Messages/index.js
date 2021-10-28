@@ -1,32 +1,12 @@
-import {getDatabase, onValue, ref} from '@firebase/database';
+import {getDatabase, onValue, ref, get, child} from '@firebase/database';
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {DummyDoctor4, DummyDoctor5, DummyDoctor6} from '../../assets';
 import {List} from '../../components';
 import {Fire} from '../../config';
-import {colors, fonts, getData} from '../../utils';
+import {colors, fonts, getData, showError} from '../../utils';
 
 const Messages = ({navigation}) => {
-  const [doctors] = useState([
-    {
-      id: 1,
-      profile: DummyDoctor4,
-      name: 'Alexander Jannie',
-      desc: 'Baik ibu, terima kasih banyak atas wakt...',
-    },
-    {
-      id: 2,
-      profile: DummyDoctor5,
-      name: 'Nairobi Putri Hayza',
-      desc: 'Oh tentu saja tidak karena jeruk it...',
-    },
-    {
-      id: 3,
-      profile: DummyDoctor6,
-      name: 'John McParker Steve',
-      desc: 'Oke menurut pak dokter bagaimana unt...',
-    },
-  ]);
   const [user, setUser] = useState({});
   const [historyChat, setHistoryChat] = useState([]);
 
@@ -35,16 +15,24 @@ const Messages = ({navigation}) => {
     const urlHistory = `messages/${user.uid}/`;
     const db = getDatabase(Fire);
     const getHistoryChat = ref(db, urlHistory);
-    onValue(getHistoryChat, snapshot => {
+    onValue(getHistoryChat, async snapshot => {
       if (snapshot.exists()) {
         const oldData = snapshot.val();
         const data = [];
-        Object.keys(oldData).map(key => {
+        const promises = await Object.keys(oldData).map(async key => {
+          const urlUidDoctor = `doctors/${oldData[key].uidPartner}`;
+          const dbRef = ref(getDatabase(Fire));
+          const detailDoctor = await get(child(dbRef, urlUidDoctor));
+          console.log('detail doctors: ', detailDoctor.val());
           data.push({
             id: key,
+            detailDoctor: detailDoctor.val(),
             ...oldData[key],
           });
         });
+
+        await Promise.all(promises);
+
         console.log('new data history: ', data);
         setHistoryChat(data);
       }
@@ -64,8 +52,8 @@ const Messages = ({navigation}) => {
           return (
             <List
               key={chat.id}
-              profile={chat.uidPartner}
-              name={chat.uidPartner}
+              profile={{uri: chat.detailDoctor.photo}}
+              name={chat.detailDoctor.fullName}
               desc={chat.lastContentChat}
               onPress={() => navigation.navigate('Chatting')}
             />
