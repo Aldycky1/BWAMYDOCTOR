@@ -1,9 +1,9 @@
-import { child, get, getDatabase, onValue, ref } from '@firebase/database';
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { List } from '../../components';
-import { Fire } from '../../config';
-import { colors, fonts, getData } from '../../utils';
+import {child, get, getDatabase, onValue, ref} from '@firebase/database';
+import React, {useEffect, useState} from 'react';
+import {StyleSheet, Text, View} from 'react-native';
+import {List} from '../../components';
+import {Fire} from '../../config';
+import {colors, fonts, getData} from '../../utils';
 
 const Messages = ({navigation}) => {
   const [user, setUser] = useState({});
@@ -22,7 +22,6 @@ const Messages = ({navigation}) => {
           const urlUidDoctor = `doctors/${oldData[key].uidPartner}`;
           const dbRef = ref(getDatabase(Fire));
           const detailDoctor = await get(child(dbRef, urlUidDoctor));
-          console.log('detail doctors: ', detailDoctor.val());
           data.push({
             id: key,
             detailDoctor: detailDoctor.val(),
@@ -32,7 +31,6 @@ const Messages = ({navigation}) => {
 
         await Promise.all(promises);
 
-        console.log('new data history: ', data);
         setHistoryChat(data);
       }
     });

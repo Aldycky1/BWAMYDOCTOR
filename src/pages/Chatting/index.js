@@ -45,7 +45,6 @@ const Chatting = ({navigation, route}) => {
             data: newDataChat,
           });
         });
-        console.log('all data chat: ', allDataChat);
         setChatData(allDataChat);
       }
     });
@@ -58,7 +57,6 @@ const Chatting = ({navigation, route}) => {
   };
 
   const chatSend = () => {
-    console.log('user: ', user);
     const today = new Date();
     const data = {
       sendBy: user.uid,
