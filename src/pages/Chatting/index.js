@@ -3,7 +3,14 @@ import React, {useEffect, useState} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {ChatItem, Header, InputChat} from '../../components';
 import {Fire} from '../../config';
-import {colors, fonts, getData, showError} from '../../utils';
+import {
+  colors,
+  fonts,
+  getData,
+  showError,
+  getChatTime,
+  setDateChat,
+} from '../../utils';
 
 const Chatting = ({navigation, route}) => {
   const dataDoctor = route.params;
@@ -20,28 +27,21 @@ const Chatting = ({navigation, route}) => {
   const chatSend = () => {
     console.log('user: ', user);
     const today = new Date();
-    const hour = today.getHours();
-    const minutes = today.getMinutes();
-    const year = today.getFullYear();
-    const month = today.getMonth() + 1;
-    const date = today.getDate();
     const data = {
       sendBy: user.uid,
-      chatDate: new Date().getTime(),
-      chatTime: `${hour}:${minutes} ${hour > 12 ? 'PM' : 'AM'}`,
+      chatDate: today.getTime(),
+      chatTime: getChatTime(today),
       chatContent: chatContent,
     };
+
+    const chatID = `${user.uid}_${dataDoctor.data.uid}`;
+
+    const urlFirebase = `chatting/${chatID}/allChat/${setDateChat(today)}`;
     console.log('chat yang akan dikirim: ', data);
-    console.log(
-      'url: ',
-      `chatting/${user.uid}_${dataDoctor.data.uid}/allChat/${year}-${month}-${date}`,
-    );
+    console.log('url: ', urlFirebase);
     // kirim ke firebase
     const db = getDatabase(Fire);
-    const allChatList = ref(
-      db,
-      `chatting/${user.uid}_${dataDoctor.data.uid}/allChat/${year}-${month}-${date}/`,
-    );
+    const allChatList = ref(db, urlFirebase);
     const newChat = push(allChatList);
     set(newChat, data)
       .then(() => {
