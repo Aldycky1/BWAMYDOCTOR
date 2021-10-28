@@ -1,8 +1,8 @@
 import {
-  child,
   get,
   getDatabase,
   limitToLast,
+  onValue,
   orderByChild,
   query,
   ref,
@@ -65,35 +65,39 @@ const Doctor = ({navigation}) => {
   };
 
   const getCategoryDoctor = () => {
-    const dbRef = ref(getDatabase(Fire));
-    get(child(dbRef, 'category_doctor/'))
-      .then(value => {
+    const db = getDatabase(Fire);
+    onValue(
+      ref(db, 'category_doctor/'),
+      value => {
         if (value.exists()) {
           const data = value.val();
           const filterData = data.filter(el => el !== null);
 
           setCategoryDoctor(filterData);
         }
-      })
-      .catch(error => {
-        showError(error);
-      });
+      },
+      {
+        onlyOnce: true,
+      },
+    );
   };
 
   const getNews = () => {
-    const dbRef = ref(getDatabase(Fire));
-    get(child(dbRef, 'news/'))
-      .then(value => {
+    const db = getDatabase(Fire);
+    onValue(
+      ref(db, 'news/'),
+      value => {
         if (value.exists()) {
           const data = value.val();
           const filterData = data.filter(el => el !== null);
 
           setNews(filterData);
         }
-      })
-      .catch(error => {
-        showError(error);
-      });
+      },
+      {
+        onlyOnce: true,
+      },
+    );
   };
 
   const getUser = () => {

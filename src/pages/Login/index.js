@@ -1,5 +1,5 @@
 import {getAuth, signInWithEmailAndPassword} from '@firebase/auth';
-import {child, get, getDatabase, ref} from '@firebase/database';
+import {getDatabase, onValue, ref} from '@firebase/database';
 import React from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {useDispatch} from 'react-redux';
@@ -22,13 +22,19 @@ const Login = ({navigation}) => {
       .then(userCredential => {
         const user = userCredential.user;
         dispatch({type: 'SET_LOADING', value: false});
-        const dbRef = ref(getDatabase(Fire));
-        get(child(dbRef, `users/${user.uid}/`)).then(value => {
-          if (value.exists()) {
-            storeData('user', value.val());
-            navigation.replace('MainApp');
-          }
-        });
+        const db = getDatabase(Fire);
+        onValue(
+          ref(db, `users/${user.uid}/`),
+          value => {
+            if (value.exists()) {
+              storeData('user', value.val());
+              navigation.replace('MainApp');
+            }
+          },
+          {
+            onlyOnce: true,
+          },
+        );
       })
       .catch(error => {
         const errorMessage = error.message;

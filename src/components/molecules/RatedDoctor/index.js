@@ -38,11 +38,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: fonts.primary[600],
     color: colors.text.primary,
+    textTransform: 'capitalize',
   },
   category: {
     fontSize: 12,
     fontFamily: fonts.primary.normal,
     color: colors.text.secondary,
     marginTop: 2,
+    textTransform: 'capitalize',
   },
 });

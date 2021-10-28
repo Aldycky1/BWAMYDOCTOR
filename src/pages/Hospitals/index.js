@@ -1,4 +1,4 @@
-import {child, get, getDatabase, ref} from '@firebase/database';
+import {getDatabase, onValue, ref} from '@firebase/database';
 import React, {useEffect, useState} from 'react';
 import {ImageBackground, StyleSheet, Text, View} from 'react-native';
 import {ILHospitalBG} from '../../assets';
@@ -9,16 +9,18 @@ import {colors, fonts} from '../../utils';
 const Hospitals = () => {
   const [hospitals, setHospitals] = useState([]);
   useEffect(() => {
-    const dbRef = ref(getDatabase(Fire));
-    get(child(dbRef, 'hospitals/'))
-      .then(value => {
+    const db = getDatabase(Fire);
+    onValue(
+      ref(db, 'hospitals/'),
+      value => {
         if (value.exists()) {
           setHospitals(value.val());
         }
-      })
-      .catch(error => {
-        showError(error);
-      });
+      },
+      {
+        onlyOnce: true,
+      },
+    );
   }, []);
 
   return (
